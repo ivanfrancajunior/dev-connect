@@ -20,3 +20,18 @@ export const createUserValidation = () => {
       .withMessage('The password needs at least 6 characters.'),
   ];
 };
+
+export const loginValidation = () => {
+  return [
+    body("email")
+      .isString()
+      .withMessage("E-mail is required.")
+      .isEmail()
+      .withMessage("Enter a valid e-mail address."),
+      body("password")
+      .isString()
+      .withMessage("Password is required.")
+      .isLength({ min: 5 })
+      .withMessage("The password needs at least 5 characters."),
+  ];
+};
