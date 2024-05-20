@@ -20,3 +20,20 @@ export const profileValidation = () => {
       .withMessage('Status must be at least 2 characters.'),
   ];
 };
+export const experienceValidation = () => {
+  return [
+    body('title')
+      .not()
+      .isEmpty()
+      .withMessage('Title is required.'),
+    body('company')
+      .not()
+      .isEmpty().withMessage('Company is required.'),
+    body('from')
+      .not()
+      .isEmpty()
+      .withMessage('From date is required.'),
+    
+
+  ];
+};

@@ -110,7 +110,7 @@ export const getProfilebyUserId = async (req, res) => {
   }
 };
 
-export const deleteProfile = async (req,res) => {
+export const deleteProfile = async (req, res) => {
   try {
     await Profile.findOneAndDelete({ user: req.user.id });
     await User.findOneAndDelete({ _id: req.user.id });
@@ -122,3 +122,40 @@ export const deleteProfile = async (req,res) => {
     return res.status(500).json({ msg: 'Server error' });
   }
 };
+export const updateExperience = async (req, res) => {
+  try {
+    const { title, company, location, from, to, current, description } =
+      req.body;
+
+    const newExperience = {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    const checkifduplicate = profile.experience.filter(
+      (exp) => exp.company === newExperience.company
+    );
+
+    if (checkifduplicate.length > 0) {
+      return res.status(400).json({ msg: 'Duplicate experience' });
+    }
+
+    profile.experience.unshift(newExperience);
+
+    await profile.save();
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+
