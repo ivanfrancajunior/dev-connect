@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import jwt from 'jsonwebtoken';
 const secret = process.env.JWT_SECRET;
-// || 'meuarquivoenvéumapiadaquenfuncionaquandoprecisa';
 
 const hashPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);
@@ -44,6 +43,18 @@ export const register = async (req, res) => {
     return res
       .status(201)
       .json({ _id: user._id, token: generateUserJwtToken(user._id) });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ errors: [{ msg: 'Server error' }] });
+  }
+};
+
+export const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+
+    if (user) return res.status(200).json(user);
   } catch (error) {
     console.log(error);
 
