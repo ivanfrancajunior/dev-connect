@@ -1,0 +1,52 @@
+import dotenv from 'dotenv';
+dotenv.config();
+import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+import { v4 as uuid } from 'uuid';
+import jwt from 'jsonwebtoken';
+const secret = process.env.JWT_SECRET;
+// || 'meuarquivoenvéumapiadaquenfuncionaquandoprecisa';
+
+const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+};
+
+const generateUserJwtToken = (id) => {
+  return jwt.sign({ id }, secret, { expiresIn: '7d' });
+};
+
+const generateAvatar = () => {
+  return `https://robohash.org/${uuid()}?set=set3`;
+};
+
+export const register = async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const hasUser = await User.findOne({ email });
+
+    if (hasUser) {
+      return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+    }
+
+    const avatar = generateAvatar();
+
+    const hashedPassword = await hashPassword(password);
+
+    const user = await User.create({
+      name,
+      email,
+      avatar,
+      password: hashedPassword,
+    });
+
+    return res
+      .status(201)
+      .json({ _id: user._id, token: generateUserJwtToken(user._id) });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ errors: [{ msg: 'Server error' }] });
+  }
+};
