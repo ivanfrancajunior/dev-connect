@@ -4,13 +4,18 @@ import {
   getProfile,
   createProfile,
   getAllProfiles,
+  getProfilebyUserId,
 } from '../../controllers/profileController.js';
 import { profileValidation } from '../../middlewares/profileValidator.js';
 import { validate } from '../../middlewares/handleValidations.js';
 
 const router = express.Router();
 
-router.get('/', getAllProfiles, (req, res) => {
+router.get('/user/:user_id', (req, res) => {
+  return getProfilebyUserId(req, res);
+});
+
+router.get('/', (req, res) => {
   return getAllProfiles(req, res);
 });
 

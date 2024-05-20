@@ -84,8 +84,23 @@ export const getAllProfiles = async (req, res) => {
       'avatar',
     ]);
 
-    console.log(profiles.length);
     return res.status(200).json(profiles);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
+export const getProfilebyUserId = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id,
+    }).populate('user', ['name', 'avatar']);
+
+    if (!profile)
+      return res.status(400).json({ msg: 'No profile found for this user' });
+
+    return res.status(200).json(profile);
   } catch (error) {
     console.log(error);
 
