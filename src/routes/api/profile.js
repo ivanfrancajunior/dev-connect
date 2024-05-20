@@ -7,6 +7,7 @@ import {
   getProfilebyUserId,
   deleteProfile,
   updateExperience,
+  deleteExperience,
 } from '../../controllers/profileController.js';
 import {
   profileValidation,
@@ -40,6 +41,9 @@ router.put(
     return updateExperience(req, res);
   }
 );
+router.delete('/experience/:experience_id', authMiddleware, (req, res) => {
+  return deleteExperience(req, res);
+});
 
 router.delete('/', authMiddleware, (req, res) => {
   return deleteProfile(req, res);

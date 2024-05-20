@@ -158,4 +158,19 @@ export const updateExperience = async (req, res) => {
   }
 };
 
+export const deleteExperience = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
 
+    const expIndex = profile.experience
+      .map((exp) => exp.id)
+      .indexOf(req.params.id);
+    profile.experience.splice(expIndex, 1);
+    await profile.save();
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
