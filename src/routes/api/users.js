@@ -1,7 +1,12 @@
 import express from 'express';
 const router = express.Router();
+import { createUserValidation } from '../../middlewares/userValidations.js';
 
-router.get('/', (req, res) => {
+import { validate } from '../../middlewares/handleValidations.js';
+
+router.post('/', createUserValidation(), validate, (req, res) => {
+  console.log(req.body);
+
   res.send('users route');
 });
 
