@@ -5,6 +5,7 @@ import {
   createProfile,
   getAllProfiles,
   getProfilebyUserId,
+  deleteProfile
 } from '../../controllers/profileController.js';
 import { profileValidation } from '../../middlewares/profileValidator.js';
 import { validate } from '../../middlewares/handleValidations.js';
@@ -25,6 +26,11 @@ router.get('/me', authMiddleware, (req, res) => {
 
 router.post('/', authMiddleware, profileValidation(), validate, (req, res) => {
   return createProfile(req, res);
+});
+
+
+router.delete('/', authMiddleware, (req, res) => {
+  return deleteProfile(req, res);
 });
 
 export default router;

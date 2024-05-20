@@ -97,10 +97,25 @@ export const getProfilebyUserId = async (req, res) => {
       user: req.params.user_id,
     }).populate('user', ['name', 'avatar']);
 
-    if (!profile)
-      return res.status(400).json({ msg: 'No profile found for this user' });
+    if (!profile) return res.status(400).json({ msg: 'Profile not found' });
 
     return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+    if (err.kind == 'ObjectId') {
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+export const deleteProfile = async (req,res) => {
+  try {
+    await Profile.findOneAndDelete({ user: req.user.id });
+    await User.findOneAndDelete({ _id: req.user.id });
+
+    return res.status(200).json({ msg: 'User deleted' });
   } catch (error) {
     console.log(error);
 
