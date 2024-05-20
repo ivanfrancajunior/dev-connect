@@ -76,3 +76,19 @@ export const createProfile = async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 };
+
+export const getAllProfiles = async (req, res) => {
+  try {
+    const profiles = await Profile.find({}).populate('user', [
+      'name',
+      'avatar',
+    ]);
+
+    console.log(profiles.length);
+    return res.status(200).json(profiles);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
