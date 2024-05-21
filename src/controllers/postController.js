@@ -51,6 +51,9 @@ export const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
 
+    if (post.user.toString() !== req.user.id)
+      return res.status(401).json({ msg: 'User not authorized' });
+
     if (!post) return res.status(404).json({ msg: 'Post not found' });
 
     await Post.findByIdAndDelete(req.params.post_id);
