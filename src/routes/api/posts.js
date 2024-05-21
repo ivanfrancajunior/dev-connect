@@ -2,7 +2,10 @@ import express from 'express';
 const router = express.Router();
 import { authMiddleware } from '../../middlewares/authMiddleware.js';
 import { validate } from '../../middlewares/handleValidations.js';
-import { createPostValidation } from '../../middlewares/postValidations.js';
+import {
+  createPostValidation,
+  validateComment,
+} from '../../middlewares/postValidations.js';
 
 import {
   createPost,
@@ -11,6 +14,7 @@ import {
   deletePost,
   likePost,
   unlikePost,
+  commentPost,
 } from '../../controllers/postController.js';
 
 router.post(
@@ -37,4 +41,13 @@ router.put('/like/:post_id', authMiddleware, (req, res) => {
 router.put('/unlike/:post_id', authMiddleware, (req, res) => {
   return unlikePost(req, res);
 });
+router.post(
+  '/comment/:post_id',
+  authMiddleware,
+  validateComment(),
+  validate,
+  (req, res) => {
+    return commentPost(req, res);
+  }
+);
 export default router;

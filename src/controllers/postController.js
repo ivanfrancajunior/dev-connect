@@ -118,3 +118,29 @@ export const unlikePost = async (req, res) => {
     return res.status(500).json({ msg: 'Server error' });
   }
 };
+
+export const commentPost = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    const post = await Post.findById(req.params.post_id);
+
+    if (!post) return res.status(404).json({ msg: 'Post not found' });
+    const newComment = {
+      text: req.body.text,
+      name: user.name,
+      avatar: user.avatar,
+      user: req.user.id,
+    };
+
+    post.comments.unshift(newComment);
+
+    await post.save();
+
+    return res.status(200).json(post.comments);
+  } catch (error) {
+    if (error.kind == 'ObjectId')
+      return res.status(404).json({ msg: 'Post not found' });
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
