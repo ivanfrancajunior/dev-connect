@@ -192,15 +192,15 @@ export const updateEducation = async (req, res) => {
 
     const profile = await Profile.findOne({ user: req.user.id });
 
-    const checkifduplicate = profile.fieldofstudy.filter(
+    const checkIfDuplicate = profile.education.filter(
       (field) => field.fieldofstudy === newEducation.fieldofstudy
     );
 
-    if (checkifduplicate.length > 0) {
+    if (checkIfDuplicate.length > 0) {
       return res.status(400).json({ msg: 'Duplicate education' });
     }
 
-    profile.experience.unshift(newEducation);
+    profile.education.unshift(newEducation);
 
     await profile.save();
     return res.status(200).json(profile);
@@ -215,10 +215,10 @@ export const deleteEducation = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
-    const eduIndex = profile.experience
+    const eduIndex = profile.education
       .map((edu) => edu.id)
       .indexOf(req.params.id);
-    profile.experience.splice(eduIndex, 1);
+    profile.education.splice(eduIndex, 1);
     await profile.save();
     return res.status(200).json(profile);
   } catch (error) {

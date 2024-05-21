@@ -27,7 +27,9 @@ export const experienceValidation = () => {
     body('from').not().isEmpty().withMessage('From date is required.'),
   ];
 };
-export const educationValidation = () => {
+
+
+export const validateEducation = () => {
   return [
     body('school').not().isEmpty().withMessage('School is required.'),
     body('degree').not().isEmpty().withMessage('Degree is required.'),

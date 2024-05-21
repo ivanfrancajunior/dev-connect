@@ -14,7 +14,7 @@ import {
 import {
   profileValidation,
   experienceValidation,
-  educationValidation,
+  validateEducation,
 } from '../../middlewares/profileValidator.js';
 import { validate } from '../../middlewares/handleValidations.js';
 
@@ -51,13 +51,12 @@ router.delete('/experience/:experience_id', authMiddleware, (req, res) => {
 router.put(
   '/education',
   authMiddleware,
-  educationValidation(),
+  validateEducation(),
   validate,
   (req, res) => {
     return updateEducation(req, res);
   }
 );
-
 router.delete('/education/:education_id', authMiddleware, (req, res) => {
   return deleteEducation(req, res);
 });
