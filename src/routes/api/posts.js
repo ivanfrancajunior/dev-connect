@@ -8,7 +8,8 @@ import {
   createPost,
   getPostById,
   getPosts,
-  deletePost
+  deletePost,
+  likePost,
 } from '../../controllers/postController.js';
 
 router.post(
@@ -20,7 +21,6 @@ router.post(
     return createPost(req, res);
   }
 );
-
 router.get('/', authMiddleware, (req, res) => {
   return getPosts(req, res);
 });
@@ -29,5 +29,8 @@ router.get('/:post_id', authMiddleware, (req, res) => {
 });
 router.delete('/:post_id', authMiddleware, (req, res) => {
   return deletePost(req, res);
+});
+router.put('/like/:post_id', authMiddleware, (req, res) => {
+  return likePost(req, res);
 });
 export default router;
