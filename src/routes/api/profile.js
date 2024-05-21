@@ -9,6 +9,7 @@ import {
   updateExperience,
   deleteExperience,
   updateEducation,
+  deleteEducation,
 } from '../../controllers/profileController.js';
 import {
   profileValidation,
@@ -56,6 +57,10 @@ router.put(
     return updateEducation(req, res);
   }
 );
+
+router.delete('/education/:education_id', authMiddleware, (req, res) => {
+  return deleteEducation(req, res);
+});
 
 router.delete('/', authMiddleware, (req, res) => {
   return deleteProfile(req, res);

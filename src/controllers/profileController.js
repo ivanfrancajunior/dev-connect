@@ -210,3 +210,20 @@ export const updateEducation = async (req, res) => {
     return res.status(500).json({ msg: 'Server error' });
   }
 };
+
+export const deleteEducation = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    const eduIndex = profile.experience
+      .map((edu) => edu.id)
+      .indexOf(req.params.id);
+    profile.experience.splice(eduIndex, 1);
+    await profile.save();
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
