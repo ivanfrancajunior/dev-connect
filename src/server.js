@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
+import cors from 'cors';
 dotenv.config();
 connectDB();
 
@@ -10,6 +11,8 @@ import profileRouter from './routes/api/profile.js';
 import usersRouter from './routes/api/users.js';
 
 const server = express();
+
+server.use(cors({ origin: 'http://localhost:5173' }));
 
 server.use(express.json());
 
