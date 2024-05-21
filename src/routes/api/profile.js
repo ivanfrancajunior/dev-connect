@@ -10,6 +10,7 @@ import {
   deleteExperience,
   updateEducation,
   deleteEducation,
+  getGithubRepos,
 } from '../../controllers/profileController.js';
 import {
   profileValidation,
@@ -63,6 +64,9 @@ router.delete('/education/:education_id', authMiddleware, (req, res) => {
 
 router.delete('/', authMiddleware, (req, res) => {
   return deleteProfile(req, res);
+});
+router.get('/github/:username', (req, res) => {
+  return getGithubRepos(req, res);
 });
 
 export default router;

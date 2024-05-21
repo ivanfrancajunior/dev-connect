@@ -1,5 +1,9 @@
 import User from '../models/User.js';
 import Profile from '../models/Profile.js';
+import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const getProfile = async (req, res) => {
   try {
@@ -225,5 +229,29 @@ export const deleteEducation = async (req, res) => {
     console.log(error);
 
     return res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+export const getGithubRepos = async (req, res) => {
+  try {
+    const response = await axios(
+      `https://api.github.com/users/${req.params.username}/repos?per_page=10&sort=created:asc&client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}`,
+      {
+        method: 'GET',
+        headers: {
+          'user-agent': 'node.js',
+        },
+      }
+    );
+    console.log(response.data.length);
+
+    if (response.status !== 200)
+      return res.status(404).json({ msg: 'User not found' });
+
+    return res.status(200).json(response.data);
+  } catch (error) {
+    console.log(error.message);
+
+    return res.status(500).json({ msg: 'User not found' });
   }
 };
