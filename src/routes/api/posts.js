@@ -15,6 +15,7 @@ import {
   likePost,
   unlikePost,
   commentPost,
+  deleteComment,
 } from '../../controllers/postController.js';
 
 router.post(
@@ -50,4 +51,7 @@ router.post(
     return commentPost(req, res);
   }
 );
+router.delete('/comment/:post_id/:comment_id', authMiddleware, (req, res) => {
+  return deleteComment(req, res);
+});
 export default router;
