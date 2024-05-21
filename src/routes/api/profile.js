@@ -8,10 +8,12 @@ import {
   deleteProfile,
   updateExperience,
   deleteExperience,
+  updateEducation,
 } from '../../controllers/profileController.js';
 import {
   profileValidation,
   experienceValidation,
+  educationValidation,
 } from '../../middlewares/profileValidator.js';
 import { validate } from '../../middlewares/handleValidations.js';
 
@@ -44,6 +46,16 @@ router.put(
 router.delete('/experience/:experience_id', authMiddleware, (req, res) => {
   return deleteExperience(req, res);
 });
+
+router.put(
+  '/education',
+  authMiddleware,
+  educationValidation(),
+  validate,
+  (req, res) => {
+    return updateEducation(req, res);
+  }
+);
 
 router.delete('/', authMiddleware, (req, res) => {
   return deleteProfile(req, res);

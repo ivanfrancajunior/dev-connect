@@ -174,3 +174,39 @@ export const deleteExperience = async (req, res) => {
     return res.status(500).json({ msg: 'Server error' });
   }
 };
+
+export const updateEducation = async (req, res) => {
+  try {
+    const { school, degree, fieldofstudy, from, to, current, description } =
+      req.body;
+
+    const newEducation = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    const checkifduplicate = profile.fieldofstudy.filter(
+      (field) => field.fieldofstudy === newEducation.fieldofstudy
+    );
+
+    if (checkifduplicate.length > 0) {
+      return res.status(400).json({ msg: 'Duplicate education' });
+    }
+
+    profile.experience.unshift(newEducation);
+
+    await profile.save();
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
