@@ -8,6 +8,7 @@ import {
   createPost,
   getPostById,
   getPosts,
+  deletePost
 } from '../../controllers/postController.js';
 
 router.post(
@@ -25,5 +26,8 @@ router.get('/', authMiddleware, (req, res) => {
 });
 router.get('/:post_id', authMiddleware, (req, res) => {
   return getPostById(req, res);
+});
+router.delete('/:post_id', authMiddleware, (req, res) => {
+  return deletePost(req, res);
 });
 export default router;
