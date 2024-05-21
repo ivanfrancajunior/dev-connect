@@ -10,6 +10,7 @@ import {
   getPosts,
   deletePost,
   likePost,
+  unlikePost,
 } from '../../controllers/postController.js';
 
 router.post(
@@ -32,5 +33,8 @@ router.delete('/:post_id', authMiddleware, (req, res) => {
 });
 router.put('/like/:post_id', authMiddleware, (req, res) => {
   return likePost(req, res);
+});
+router.put('/unlike/:post_id', authMiddleware, (req, res) => {
+  return unlikePost(req, res);
 });
 export default router;

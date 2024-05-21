@@ -90,3 +90,31 @@ export const likePost = async (req, res) => {
     return res.status(500).json({ msg: 'Server error' });
   }
 };
+export const unlikePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+
+    if (!post) return res.status(404).json({ msg: 'Post not found' });
+
+    if (
+      post.likes.filter((like) => like.user.toString() === req.user.id).length <
+      1
+    )
+      return res.status(400).json({ msg: 'This post has not yet been liked' });
+
+    const removeIndex = post.likes
+      .map((like) => like.user.toString())
+      .indexOf(req.user.id);
+
+    post.likes.splice(removeIndex, 1);
+
+    await post.save();
+
+    return res.status(200).json(post.likes);
+  } catch (error) {
+    if (error.kind == 'ObjectId')
+      return res.status(404).json({ msg: 'Post not found' });
+
+    return res.status(500).json({ msg: 'Server error' });
+  }
+};
