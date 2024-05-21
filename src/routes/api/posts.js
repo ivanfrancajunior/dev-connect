@@ -1,8 +1,29 @@
 import express from 'express';
 const router = express.Router();
+import { authMiddleware } from '../../middlewares/authMiddleware.js';
+import { validate } from '../../middlewares/handleValidations.js';
+import { createPostValidation } from '../../middlewares/postValidations.js';
 
-router.get('/', (req, res) => {
-  res.send('Post route');
+import {
+  createPost,
+  getPostById,
+  getPosts,
+} from '../../controllers/postController.js';
+
+router.post(
+  '/new',
+  authMiddleware,
+  createPostValidation(),
+  validate,
+  (req, res) => {
+    return createPost(req, res);
+  }
+);
+
+router.get('/', authMiddleware, (req, res) => {
+  return getPosts(req, res);
 });
-
+router.get('/:post_id', authMiddleware, (req, res) => {
+  return getPostById(req, res);
+});
 export default router;
